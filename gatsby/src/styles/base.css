@@ -1,0 +1,72 @@
+@font-face {
+  font-family: "Source";
+  src: url("fonts/SourceSansPro-Regular.ttf") format("truetype");
+}
+
+* {
+  font-family: "Source" !important;
+}
+
+:root {
+  --custom-primary: #665687;
+  --custom-secondary: #b084cc;
+}
+
+main {
+  padding: 60px 0 40px 0;
+}
+
+.home-logo {
+  position: absolute;
+  top: 34px;
+  left: 10px;
+}
+
+.home-hero h1 {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .home-hero h1 {
+    top: 25%;
+  }
+}
+
+.home-quote {
+  background-color: var(--custom-primary);
+  text-align: center;
+  padding: 50px;
+}
+
+.home-quote q {
+  font-size: 2rem;
+}
+
+.home-quote q, .home-quote p {
+  color: #fff;
+}
+
+.home-content .container {
+  padding: 50px !important;
+}
+
+.pagination {
+  height: 50px;
+}
+
+.pagination span {
+  width: 100%;
+  text-align: center;
+}
+
+.pagination .left-arrow {
+  margin-right: 10px;
+}
+
+.pagination .right-arrow {
+  margin-left: 10px;
+}

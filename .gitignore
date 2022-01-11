@@ -1,0 +1,10 @@
+.env
+.idea
+
+/gatsby/public/
+/gatsby/node_modules/
+/gatsby/.cache/
+
+# exclude the files but not the folder
+cert/*
+!cert/.gitkeep

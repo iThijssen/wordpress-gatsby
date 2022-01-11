@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: db_container
+    image: mysql:8.0
+    # If you use mysql version 8 you need PHP to handle passwords correctly
+    command: '--default-authentication-plugin=mysql_native_password'
+    # The MYSQL_* will automatically be passed
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=wordpress
+    volumes:
+      - db_volume:/var/lib/mysql
+    restart: unless-stopped
+  wordpress:
+    container_name: wordpress_container
+    image: wordpress:5-fpm-alpine
+    # https://github.com/tus/official-images-docs/blob/master/wordpress/README.md#running-as-an-arbitrary-user
+    # Avoid conflict between UIDs of www-data (82 in Alpine vs. 33 in Ubuntu)
+    user: "33:33"
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_HOST=db:3306
+      - WORDPRESS_DB_USER=${MYSQL_USER}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_NAME=wordpress
+    volumes:
+      - wordpress_volume:/var/www/html
+      - ./siteserver/proxy/conf/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    restart: unless-stopped
+  website:
+    container_name: website_container
+    build:
+      context: ./siteserver
+      args:
+        SMTP_PW: ${SMTP_PW}
+        NGINX_CONF: ${NGINX_CONF}
+        WEBHOOK_KEY: ${WEBHOOK_KEY}
+    env_file:
+      - .env
+    ports:
+      - ${HTTPS}:443
+      - ${HTTP}:80
+    volumes:
+      - ./gatsby:/home/site
+      - ./siteserver/proxy/srv_data/cert:/etc/nginx/cert
+      - wordpress_volume:/var/www/html
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+
+volumes:
+  db_volume:
+  wordpress_volume:

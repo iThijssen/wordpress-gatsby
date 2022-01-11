@@ -1,0 +1,5 @@
+# check for SSL-certificate
+#0 1 * * * /home/scripts/cert_domain.sh nsp.ivanne.de > /var/log/cert_domain.log
+# check for content-update
+* * * * * /home/scripts/build.sh > /var/log/build.log
+* * * * * sleep 30 && /home/scripts/build.sh > /var/log/build.log
